@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Make My List</title>
+  <title>BrewTunesStories</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" integrity="sha384-zF4BRsG/fLiTGfR9QL82DrilZxrwgY/+du4p/c7J72zZj+FLYq4zY00RylP9ZjiT" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -12,27 +12,28 @@
 </head>
 <body>
   <div class="container">
-    <h1>Add a story</h1>
+    <h1>BrewTunesStories</h1>
+    <h2>Add a story</h2>
     <form role="form">
       <div class="form-group">
         <label for="name-input">Name:</label>
         <input class="form-control" id="name-input" type="text">
       </div>
       <div class="form-group">
-        <label for="email-input">Status:</label>
+        <label for="status-input">Status:</label>
         <input class="form-control" id="status-input" type="text">
         <p class="help-block">Only "necessary" or "nice-to-have".</p>
       </div>
-      <button class="btn btn-default" id="add-story" type="submit">Submit</button>
+      <button class="btn btn-default" id="add-story" type="submit">Add Story</button>
     </form>
 
     <div id="incomplete">
-      <h1>Necessary</h1>
+      <h2>Necessary</h2>
       <div class="list-group" id="necessary"></div>
-      <h1>Nice to have</h1>
+      <h2>Nice to have</h2>
       <div class="list-group" id="nice-to-have"></div>
     </div>
-    <h1>Completed</h1>
+    <h2>Completed</h2>
     <div class="list-group" id="completed"></div>
   </div>
 </body>

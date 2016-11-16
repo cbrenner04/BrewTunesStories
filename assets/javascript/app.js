@@ -177,32 +177,98 @@ $(document).on('ready', function() {
 
     for (var i = 0; i < storyKeys.length; i++) {
       var currentItem = stories[storyKeys[i]];
-      var listItem = $('<li>').addClass('listItem list-group-item')
+      var listItem = $('<div>').addClass('listItem list-group-item')
                               .attr('data-key', storyKeys[i])
+                              .attr('data-toggle', 'collapse')
+                              .attr('data-target', '#' + storyKeys[i])
+                              .attr('aria-expanded', 'false')
                               .text(currentItem.name);
+      var inputGroup = $('<div>').addClass('form-group').append(
+                         $('<label>').attr('for', 'name-update').text('Name')
+                       ).append(
+                         $('<input>').addClass('form-control nameUpdate')
+                                      .attr('id', 'name-update')
+                                      .attr('type', 'text')
+                       );
+      var updateButton = $('<button>').addClass('btn btn-default updateButton')
+                                      .attr('type', 'submit')
+                                      .attr('data-key', storyKeys[i])
+                                      .text('Update');
+      var statusButton = $('<button>').addClass('btn btn-primary statusButton')
+                                      .attr('type', 'submit')
+                                      .attr('data-key', storyKeys[i]);
+      var updateForm = $('<form>').attr('role', 'form')
+                                  .append(inputGroup)
+                                  .append(updateButton)
+                                  .append(statusButton);
+      var updateWell = $('<div>').addClass('well').append(updateForm);
+      var collapse = $('<div>').addClass('collapse').attr('id', storyKeys[i])
+                                 .append(updateWell);
 
       if (currentItem.status === 'necessary') {
-        $('#necessary').append(listItem);
+        $('#necessary').append(listItem)
+                       .append(collapse);
+        statusButton.text('Complete');
       } else if (currentItem.status === 'nice-to-have') {
-        $('#nice-to-have').append(listItem);
+        $('#nice-to-have').append(listItem)
+                          .append(collapse);
+        statusButton.text('Complete');
       } else if (currentItem.status === 'completed') {
-        $('#completed').append(listItem);
+        $('#completed').append(listItem)
+                       .append(collapse);
+        statusButton.text('Change Status');
       }
     }
   });
 
-  $('#incomplete').on('click', '.listItem', function() {
-    $(this).remove();
-    database.ref().child('data/stories').child($(this).data('key'))
+  $('#incomplete').on('click', '.statusButton', function() {
+    database.ref().child($(this).data('key'))
             .update({
               status: 'completed'
             });
+
+    // Don't refresh the page!
+    return false;
+  });
+
+  $('#completed').on('click', '.statusButton', function() {
+    database.ref().child($(this).data('key'))
+            .update({
+              status: 'nice-to-have'
+            });
+
+    // Don't refresh the page!
+    return false;
+  });
+
+  $('body').on('click', '.updateButton', function() {
+    var nameUpdateInput = $(this).parent().children('.form-group')
+                                          .children('.nameUpdate');
+    if (nameUpdateInput.val() === undefined || nameUpdateInput.val() === '') {
+      // empty the inputs
+      nameUpdateInput.val('');
+      return false;
+    }
+
+    // Grabbed values from text boxes
+    name = nameUpdateInput.val().trim();
+
+    // Code for handling the push
+    database.ref().child($(this).data('key')).update({
+      name: name,
+    });
+
+    // empty the inputs
+    nameUpdateInput.val('');
+
+    // Don't refresh the page!
+    return false;
   });
 
   // Capture Button Click
   $("#add-story").on("click", function() {
-    if (($("#name-input").val === undefined || ($("#name-input").val === '') ||
-      ($("#status-input").val() === undefined) || $("#status-input").val() === ''))  {
+    if (($("#name-input").val() === undefined || ($("#name-input").val() === '') ||
+       ($("#status-input").val() === undefined) || $("#status-input").val() === ''))  {
       // empty the inputs
       $("#name-input").val('');
       $("#status-input").val('');

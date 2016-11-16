@@ -183,24 +183,32 @@ $(document).on('ready', function() {
                               .attr('data-target', '#' + storyKeys[i])
                               .attr('aria-expanded', 'false')
                               .text(currentItem.name);
-      var inputGroup = $('<div>').addClass('form-group').append(
-                         $('<label>').attr('for', 'name-update').text('Name')
-                       ).append(
-                         $('<input>').addClass('form-control nameUpdate')
-                                      .attr('id', 'name-update')
-                                      .attr('type', 'text')
-                       );
+      var nameInput = $('<div>').addClass('form-group').append(
+                        $('<label>').attr('for', 'name-update').text('Name')
+                      ).append(
+                        $('<input>').addClass('form-control nameUpdate')
+                                    .attr('id', 'name-update')
+                                    .attr('type', 'text')
+                                    .val(currentItem.name)
+                      );
+      var statusSelect = $('<div>').addClass('form-group').append(
+                           $('<label>').attr('for', 'status-update').text('Status')
+                         ).append(
+                           $('<select>').addClass('form-control statusUpdate')
+                                       .attr('id', 'status-update')
+                                       .append($('<option>',{value: 'necessary', text:'necessary'}))
+                                       .append($('<option>',{value: 'nice-to-have', text:'nice-to-have'}))
+                                       .append($('<option>',{value: 'completed', text:'completed'}))
+                                       .val(currentItem.status)
+                         );
       var updateButton = $('<button>').addClass('btn btn-default updateButton')
                                       .attr('type', 'submit')
                                       .attr('data-key', storyKeys[i])
                                       .text('Update');
-      var statusButton = $('<button>').addClass('btn btn-primary statusButton')
-                                      .attr('type', 'submit')
-                                      .attr('data-key', storyKeys[i]);
       var updateForm = $('<form>').attr('role', 'form')
-                                  .append(inputGroup)
-                                  .append(updateButton)
-                                  .append(statusButton);
+                                  .append(nameInput)
+                                  .append(statusSelect)
+                                  .append(updateButton);
       var updateWell = $('<div>').addClass('well').append(updateForm);
       var collapse = $('<div>').addClass('collapse').attr('id', storyKeys[i])
                                  .append(updateWell);
@@ -208,15 +216,12 @@ $(document).on('ready', function() {
       if (currentItem.status === 'necessary') {
         $('#necessary').append(listItem)
                        .append(collapse);
-        statusButton.text('Complete');
       } else if (currentItem.status === 'nice-to-have') {
         $('#nice-to-have').append(listItem)
                           .append(collapse);
-        statusButton.text('Complete');
       } else if (currentItem.status === 'completed') {
         $('#completed').append(listItem)
                        .append(collapse);
-        statusButton.text('Change Status');
       }
     }
   });
@@ -244,6 +249,8 @@ $(document).on('ready', function() {
   $('body').on('click', '.updateButton', function() {
     var nameUpdateInput = $(this).parent().children('.form-group')
                                           .children('.nameUpdate');
+    var statusUpdateInput = $(this).parent().children('.form-group')
+                                            .children('.statusUpdate');
     if (nameUpdateInput.val() === undefined || nameUpdateInput.val() === '') {
       // empty the inputs
       nameUpdateInput.val('');
@@ -252,10 +259,12 @@ $(document).on('ready', function() {
 
     // Grabbed values from text boxes
     name = nameUpdateInput.val().trim();
+    status = statusUpdateInput.val().trim();
 
     // Code for handling the push
     database.ref().child($(this).data('key')).update({
       name: name,
+      status: status
     });
 
     // empty the inputs

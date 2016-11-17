@@ -177,12 +177,18 @@ $(document).on('ready', function() {
 
     for (var i = 0; i < storyKeys.length; i++) {
       var currentItem = stories[storyKeys[i]];
+      var ownerBadge = $('<span>').addClass('badge pull-right').text(currentItem.owner);
       var listItem = $('<div>').addClass('listItem list-group-item')
+                              .append(ownerBadge)
                               .attr('data-key', storyKeys[i])
                               .attr('data-toggle', 'collapse')
                               .attr('data-target', '#' + storyKeys[i])
                               .attr('aria-expanded', 'false')
-                              .text(currentItem.name);
+                              .html(
+                                $('<p>').text(currentItem.name)
+                                        .append(' ')
+                                        .append(ownerBadge)
+                              );
       var nameInput = $('<div>').addClass('form-group').append(
                         $('<label>').attr('for', 'name-update').text('Name')
                       ).append(
@@ -201,6 +207,17 @@ $(document).on('ready', function() {
                                        .append($('<option>',{value: 'completed', text:'completed'}))
                                        .val(currentItem.status)
                          );
+      var ownerSelect = $('<div>').addClass('form-group').append(
+                          $('<label>').attr('for', 'owner-update').text('Owner')
+                        ).append(
+                          $('<select>').addClass('form-control ownerUpdate')
+                                      .attr('id', 'owner-update')
+                                      .append($('<option>',{value: 'Alan', text:'Alan'}))
+                                      .append($('<option>',{value: 'Adam', text:'Adam'}))
+                                      .append($('<option>',{value: 'Chris', text:'Chris'}))
+                                      .append($('<option>',{value: 'Max', text:'Max'}))
+                                      .val(currentItem.status)
+                         );
       var updateButton = $('<button>').addClass('btn btn-default updateButton')
                                       .attr('type', 'submit')
                                       .attr('data-key', storyKeys[i])
@@ -208,6 +225,7 @@ $(document).on('ready', function() {
       var updateForm = $('<form>').attr('role', 'form')
                                   .append(nameInput)
                                   .append(statusSelect)
+                                  .append(ownerSelect)
                                   .append(updateButton);
       var updateWell = $('<div>').addClass('well').append(updateForm);
       var collapse = $('<div>').addClass('collapse').attr('id', storyKeys[i])
@@ -251,6 +269,8 @@ $(document).on('ready', function() {
                                           .children('.nameUpdate');
     var statusUpdateInput = $(this).parent().children('.form-group')
                                             .children('.statusUpdate');
+    var ownerUpdateInput = $(this).parent().children('.form-group')
+                                           .children('.ownerUpdate');
     if (nameUpdateInput.val() === undefined || nameUpdateInput.val() === '') {
       // empty the inputs
       nameUpdateInput.val('');
@@ -259,12 +279,14 @@ $(document).on('ready', function() {
 
     // Grabbed values from text boxes
     name = nameUpdateInput.val().trim();
-    status = statusUpdateInput.val().trim();
+    status = statusUpdateInput.val();
+    owner = ownerUpdateInput.val();
 
     // Code for handling the push
     database.ref().child($(this).data('key')).update({
       name: name,
-      status: status
+      status: status,
+      owner: owner
     });
 
     // empty the inputs

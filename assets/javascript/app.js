@@ -1,4 +1,5 @@
 // Initialize Firebase
+
 var config = {
   apiKey: "AIzaSyA_DGjtOkkEvVXFiEiXpp95AZAP8J8TWhs",
   authDomain: "brewtunesstories.firebaseapp.com",

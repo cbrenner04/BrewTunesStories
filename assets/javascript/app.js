@@ -216,7 +216,7 @@ $(document).on('ready', function() {
                                       .append($('<option>',{value: 'Adam', text:'Adam'}))
                                       .append($('<option>',{value: 'Chris', text:'Chris'}))
                                       .append($('<option>',{value: 'Max', text:'Max'}))
-                                      .val(currentItem.status)
+                                      .val(currentItem.owner)
                          );
       var updateButton = $('<button>').addClass('btn btn-default updateButton')
                                       .attr('type', 'submit')

@@ -245,26 +245,6 @@ $(document).on('ready', function() {
     }
   });
 
-  $('#incomplete').on('click', '.statusButton', function() {
-    database.ref().child($(this).data('key'))
-            .update({
-              status: 'completed'
-            });
-
-    // Don't refresh the page!
-    return false;
-  });
-
-  $('#completed').on('click', '.statusButton', function() {
-    database.ref().child($(this).data('key'))
-            .update({
-              status: 'nice-to-have'
-            });
-
-    // Don't refresh the page!
-    return false;
-  });
-
   $('body').on('click', '.updateButton', function() {
     var nameUpdateInput = $(this).parent().children('.form-group')
                                           .children('.nameUpdate');
